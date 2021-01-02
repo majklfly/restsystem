@@ -5,6 +5,9 @@
     "resolutions": {
         "styled-components": "^5"
     },
+    "engines": {
+        "node": "14.15.3"
+    },
     "private": true,
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.32",
