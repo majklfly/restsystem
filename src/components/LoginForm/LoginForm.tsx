@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import { Input, Button, InputAdornment, IconButton } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
-import { Formik, Form, Field } from "formik";
+import { Formik } from "formik";
 
 import * as palette from "../../variables";
-import { PasswordInput } from "../../components/PasswordInput/PasswordInput";
 
 const Container = styled.article`
   width: 100%;
   height: 200px;
   background-color: ${palette.background_color_secondary};
   box-shadow: 0px 0px 30px ${palette.background_shadow_color_secondary};
+  font-family: ${palette.font_primary};
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -19,36 +20,92 @@ const Container = styled.article`
   padding: 10%;
 `;
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Field = styled(Input)`
+  && {
+    margin-bottom: 10%;
+    width: 100%;
+  }
+`;
+
+const Btn = styled(Button)`
+  && {
+    background-color: transparent;
+  }
+`;
+
 interface props {}
 
-interface MyFormValues {
-  firstName: string;
-}
-
 export const LoginForm: React.FC<props> = () => {
-  const initialValues: MyFormValues = { firstName: "" };
+  const [showPassword, setShowPassword] = useState<boolean>(true);
+
   return (
     <Container>
       <Formik
-        initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
+        initialValues={{ email: "", password: "" }}
+        onSubmit={(data, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          fetch("/user/login/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+              email: data.email,
+              password: data.password,
+            }),
+          }).then((res) => {
+            res.json().then((data) => {
+              console.log("res", data);
+            });
+          });
+          console.log(data);
+          setSubmitting(false);
+          resetForm();
         }}
       >
-        <Form>
-          <Field
-            id="email"
-            name="email"
-            placeholder="Email"
-            className="form-control"
-          />
-          <Field component={PasswordInput} />
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </Form>
+        {({ values, isSubmitting, handleSubmit, handleChange, handleBlur }) => (
+          <Form onSubmit={handleSubmit}>
+            <Field
+              placeholder="Email"
+              name="email"
+              type="email"
+              autoFocus
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Field
+              placeholder="Password"
+              name="password"
+              type={showPassword ? "password" : "text"}
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    onMouseDown={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <div>
+              <Btn disabled={isSubmitting} type="submit">
+                Log In
+              </Btn>
+            </div>
+          </Form>
+        )}
       </Formik>
     </Container>
   );

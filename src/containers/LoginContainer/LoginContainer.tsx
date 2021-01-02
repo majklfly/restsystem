@@ -14,6 +14,7 @@ const Container = styled.section`
   position: absolute;
   display: flex;
   position: absolute;
+  font-family: Cantarell, sans-serif;
   top: 0;
   justify-content: center;
   align-items: center;
@@ -52,6 +53,10 @@ const Button = styled.div`
   padding: 10%;
   border-radius: 10px;
   cursor: pointer;
+
+  &:hover {
+    box-shadow: 0px 0px 40px ${palette.background_shadow_color};
+  }
 `;
 
 const RightSide = styled.article`
@@ -66,6 +71,9 @@ const RightSide = styled.article`
 const LeftSide = styled.div`
   width: 45%;
   min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const LoginContainer: React.FC<props> = () => {
@@ -73,15 +81,15 @@ export const LoginContainer: React.FC<props> = () => {
     <Container>
       <Box>
         <LeftSide>
-          <Lottie animationData={loadingAnimation} loop={false} style={{}} />
+          <Lottie animationData={loadingAnimation} loop={false} />
           <Button>
-            <h4>I would like to have a look around without signing</h4>
+            <h3>Show me around (demo version)</h3>
           </Button>
         </LeftSide>
         <RightSide>
           <LoginForm />
           <hr />
-          <h5>Forgot your password?</h5>
+          <h4>Forgot your password?</h4>
         </RightSide>
       </Box>
     </Container>
