@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Input, Button, InputAdornment, IconButton } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import Cookies from "js-cookie";
 
 import { Formik } from "formik";
 
@@ -43,6 +44,21 @@ interface props {}
 
 export const LoginForm: React.FC<props> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
+  const [csrfToken, setCsrfToken] = useState<string>("");
+
+  useEffect(() => {
+    fetch("/user/auth/", {
+      headers: {
+        accepts: "application/json",
+      },
+    }).then((res) => {
+      const cookie = Cookies.get("csrftoken");
+      console.log("runned", cookie);
+      if (cookie) {
+        setCsrfToken(cookie);
+      }
+    });
+  }, []);
 
   return (
     <Container>
@@ -50,19 +66,18 @@ export const LoginForm: React.FC<props> = () => {
         initialValues={{ email: "", password: "" }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
+          console.log("token", csrfToken);
           fetch("/user/login/", {
             method: "POST",
             headers: {
-              "Content-Type": "application/json;charset=utf-8",
+              "X-CSRFToken": csrfToken,
             },
             body: JSON.stringify({
               email: data.email,
               password: data.password,
             }),
           }).then((res) => {
-            res.json().then((data) => {
-              console.log("res", data);
-            });
+            console.log("res", res);
           });
           console.log(data);
           setSubmitting(false);
