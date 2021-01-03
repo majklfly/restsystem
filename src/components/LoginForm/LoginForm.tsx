@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/globalSlice";
 
-import { Container, Form, Field, Btn } from "./styles";
+import { Container, Form, Field, Btn, ButtonContainer } from "./styles";
 import { Formik } from "formik";
 
 interface props {}
@@ -90,11 +90,12 @@ export const LoginForm: React.FC<props> = () => {
                 </InputAdornment>
               }
             />
-            <div>
+            <ButtonContainer>
               <Btn disabled={isSubmitting} type="submit">
                 Log In
               </Btn>
-            </div>
+              <h4>Forgot your password?</h4>
+            </ButtonContainer>
           </Form>
         )}
       </Formik>

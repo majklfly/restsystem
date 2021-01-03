@@ -88,8 +88,6 @@ export const LoginContainer: React.FC<props> = () => {
         </LeftSide>
         <RightSide>
           <LoginForm />
-          <hr />
-          <h4>Forgot your password?</h4>
         </RightSide>
       </Box>
     </Container>
