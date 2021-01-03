@@ -1,44 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Input, Button, InputAdornment, IconButton } from "@material-ui/core";
+import { InputAdornment, IconButton } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import Cookies from "js-cookie";
 
+import { Container, Form, Field, Btn } from "./styles";
+
 import { Formik } from "formik";
-
-import * as palette from "../../variables";
-
-const Container = styled.article`
-  width: 100%;
-  height: 200px;
-  background-color: ${palette.background_color_secondary};
-  box-shadow: 0px 0px 30px ${palette.background_shadow_color_secondary};
-  font-family: ${palette.font_primary};
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10%;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Field = styled(Input)`
-  && {
-    margin-bottom: 10%;
-    width: 100%;
-  }
-`;
-
-const Btn = styled(Button)`
-  && {
-    background-color: transparent;
-  }
-`;
 
 interface props {}
 
@@ -77,7 +44,11 @@ export const LoginForm: React.FC<props> = () => {
               password: data.password,
             }),
           }).then((res) => {
-            console.log("res", res);
+            res.json().then((data) => {
+              if (data.user) {
+                console.log("logged in as ", data.user);
+              }
+            });
           });
           console.log(data);
           setSubmitting(false);
