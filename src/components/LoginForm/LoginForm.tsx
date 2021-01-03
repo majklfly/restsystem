@@ -3,8 +3,10 @@ import { InputAdornment, IconButton } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import Cookies from "js-cookie";
 
-import { Container, Form, Field, Btn } from "./styles";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/slices/globalSlice";
 
+import { Container, Form, Field, Btn } from "./styles";
 import { Formik } from "formik";
 
 interface props {}
@@ -12,6 +14,8 @@ interface props {}
 export const LoginForm: React.FC<props> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [csrfToken, setCsrfToken] = useState<string>("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetch("/user/auth/", {
@@ -47,6 +51,7 @@ export const LoginForm: React.FC<props> = () => {
             res.json().then((data) => {
               if (data.user) {
                 console.log("logged in as ", data.user);
+                dispatch(addUser({ user_id: data.user }));
               }
             });
           });

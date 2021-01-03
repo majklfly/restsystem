@@ -13,7 +13,7 @@ let initialState: CurrentState = {
 };
 
 const globalSlice = createSlice({
-  name: "globalSlice",
+  name: "global",
   initialState,
   reducers: {
     addUser(state, action: PayloadAction<user>) {
