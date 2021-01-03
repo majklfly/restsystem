@@ -12,11 +12,11 @@ export const Background: React.FC = () => {
       <g
         id="Patterns"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       >
-        <g id="Waimakariri" fill-rule="nonzero">
+        <g id="Waimakariri" fillRule="nonzero">
           <g transform="translate(-414.000000, -380.000000)" id="Shape">
             <path
               d="M1074.83647,1477.19875 C1313.85783,1491.74804 1487.02955,1305.84466 1507.62292,1045.64315 C1528.21629,785.441646 1313.85783,578.006466 1074.83647,614.087563 C835.815106,650.168661 659.913561,798.209392 642.050009,1045.64315 C624.186457,1293.07692 835.815106,1462.64945 1074.83647,1477.19875 Z"

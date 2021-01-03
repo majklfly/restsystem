@@ -1,54 +1,102 @@
-import React from "react";
-import styled from "styled-components";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
+import { InputAdornment, IconButton } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import Cookies from "js-cookie";
 
-import { Formik, Form, Field } from "formik";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/slices/globalSlice";
 
-import * as palette from "../../variables";
-import { PasswordInput } from "../../components/PasswordInput/PasswordInput";
-
-const Container = styled.article`
-  width: 100%;
-  height: 200px;
-  background-color: ${palette.background_color_secondary};
-  box-shadow: 0px 0px 30px ${palette.background_shadow_color_secondary};
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10%;
-`;
+import { Container, Form, Field, Btn } from "./styles";
+import { Formik } from "formik";
 
 interface props {}
 
-interface MyFormValues {
-  firstName: string;
-}
-
 export const LoginForm: React.FC<props> = () => {
-  const initialValues: MyFormValues = { firstName: "" };
+  const [showPassword, setShowPassword] = useState<boolean>(true);
+  const [csrfToken, setCsrfToken] = useState<string>("");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetch("/user/auth/", {
+      headers: {
+        accepts: "application/json",
+      },
+    }).then((res) => {
+      const cookie = Cookies.get("csrftoken");
+      console.log("runned", cookie);
+      if (cookie) {
+        setCsrfToken(cookie);
+      }
+    });
+  }, []);
+
   return (
     <Container>
       <Formik
-        initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
+        initialValues={{ email: "", password: "" }}
+        onSubmit={(data, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          console.log("token", csrfToken);
+          fetch("/user/login/", {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({
+              email: data.email,
+              password: data.password,
+            }),
+          }).then((res) => {
+            res.json().then((data) => {
+              if (data.user) {
+                console.log("logged in as ", data.user);
+                dispatch(addUser({ user_id: data.user }));
+              }
+            });
+          });
+          console.log(data);
+          setSubmitting(false);
+          resetForm();
         }}
       >
-        <Form>
-          <Field
-            id="email"
-            name="email"
-            placeholder="Email"
-            className="form-control"
-          />
-          <Field component={PasswordInput} />
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </Form>
+        {({ values, isSubmitting, handleSubmit, handleChange, handleBlur }) => (
+          <Form onSubmit={handleSubmit}>
+            <Field
+              placeholder="Email"
+              name="email"
+              type="email"
+              autoFocus
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Field
+              placeholder="Password"
+              name="password"
+              type={showPassword ? "password" : "text"}
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    onMouseDown={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <div>
+              <Btn disabled={isSubmitting} type="submit">
+                Log In
+              </Btn>
+            </div>
+          </Form>
+        )}
       </Formik>
     </Container>
   );
