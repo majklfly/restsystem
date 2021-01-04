@@ -8,4 +8,6 @@ urlpatterns = [
     re_path(r'^auth/$',  views.login_form, name='login_form'),
     path('request-reset-email/', views.RequestPasswordResetEmail.as_view(),
          name='request-reset-email'),
+    path('password-reset/<uidb64>/<token>/',
+         views.PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
 ]
