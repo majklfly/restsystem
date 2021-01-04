@@ -1,9 +1,11 @@
-from django.conf.urls import url
+from django.urls import re_path, path
 from rest_framework import routers
 from . import views
 
 urlpatterns = [
-    url(r'^login/$', views.login_user, name='login'),
-    url(r'^logout/$', views.logout_user, name='logout'),
-    url(r'^auth/$',  views.login_form, name='login_form'),
+    re_path(r'^login/$', views.login_user, name='login'),
+    re_path(r'^logout/$', views.logout_user, name='logout'),
+    re_path(r'^auth/$',  views.login_form, name='login_form'),
+    path('request-reset-email/', views.RequestPasswordResetEmail.as_view(),
+         name='request-reset-email'),
 ]

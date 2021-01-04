@@ -9,9 +9,11 @@ import { addUser } from "../../redux/slices/globalSlice";
 import { Container, Form, Field, Btn, ButtonContainer } from "./styles";
 import { Formik } from "formik";
 
-interface props {}
+interface props {
+  setShowPasswordForm: (active: boolean) => void;
+}
 
-export const LoginForm: React.FC<props> = () => {
+export const LoginForm: React.FC<props> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [csrfToken, setCsrfToken] = useState<string>("");
 
@@ -24,7 +26,6 @@ export const LoginForm: React.FC<props> = () => {
       },
     }).then((res) => {
       const cookie = Cookies.get("csrftoken");
-      console.log("runned", cookie);
       if (cookie) {
         setCsrfToken(cookie);
       }
@@ -37,7 +38,6 @@ export const LoginForm: React.FC<props> = () => {
         initialValues={{ email: "", password: "" }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          console.log("token", csrfToken);
           fetch("/user/login/", {
             method: "POST",
             headers: {
@@ -92,7 +92,9 @@ export const LoginForm: React.FC<props> = () => {
               <Btn disabled={isSubmitting} type="submit">
                 Log In
               </Btn>
-              <Btn>Forgot your password?</Btn>
+              <Btn onClick={() => props.setShowPasswordForm(true)}>
+                Forgot your password?
+              </Btn>
             </ButtonContainer>
           </Form>
         )}
