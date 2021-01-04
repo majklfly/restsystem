@@ -1,5 +1,6 @@
 {
     "short_name": "RestSystem",
+    "description": "Restaurant management system",
     "name": "RestSystem",
     "icons": [{
             "src": "favicon.ico",
@@ -19,6 +20,6 @@
     ],
     "start_url": ".",
     "display": "standalone",
-    "theme_color": "#000000",
-    "background_color": "#ffffff"
+    "theme_color": "#7252A4",
+    "background_color": "#EFF3F0"
 }
