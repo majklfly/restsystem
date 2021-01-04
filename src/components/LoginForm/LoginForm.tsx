@@ -50,12 +50,10 @@ export const LoginForm: React.FC<props> = () => {
           }).then((res) => {
             res.json().then((data) => {
               if (data.user) {
-                console.log("logged in as ", data.user);
                 dispatch(addUser({ user_id: data.user }));
               }
             });
           });
-          console.log(data);
           setSubmitting(false);
           resetForm();
         }}
@@ -94,7 +92,7 @@ export const LoginForm: React.FC<props> = () => {
               <Btn disabled={isSubmitting} type="submit">
                 Log In
               </Btn>
-              <h4>Forgot your password?</h4>
+              <Btn>Forgot your password?</Btn>
             </ButtonContainer>
           </Form>
         )}
