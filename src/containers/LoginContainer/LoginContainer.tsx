@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
 import Lottie from "lottie-react";
@@ -23,15 +23,22 @@ interface props {}
 
 export const LoginContainer: React.FC<props> = () => {
   const [showPasswordForm, setShowPasswordForm] = useState<boolean>(false);
+  const [csrfToken, setCsrfToken] = useState<string>("");
 
   const dispatch = useDispatch();
 
-  const loginAsVisitor = () => {
+  useEffect(() => {
     const token = Cookies.get("csrftoken");
+    if (token) {
+      setCsrfToken(token);
+    }
+  }, []);
+
+  const loginAsVisitor = () => {
     fetch("/user/login/", {
       method: "POST",
       headers: {
-        "X-CSRFToken": JSON.stringify(token),
+        "X-CSRFToken": csrfToken,
       },
       body: JSON.stringify({
         email: "visitor@r-restsystem.com",
