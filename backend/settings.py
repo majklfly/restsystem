@@ -19,7 +19,6 @@ DEBUG = os.environ['DEBUG_MODE']
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'users.CustomUser'
-AUTHENTICATION_BACKENDS = ['utils.custom_authentication.CustomBackend', ]
 
 # Application definition
 
