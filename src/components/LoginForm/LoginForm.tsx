@@ -6,30 +6,75 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/globalSlice";
 
-import { Container, Form, Field, Btn, ButtonContainer } from "./styles";
+import {
+  Container,
+  Form,
+  Field,
+  Btn,
+  ButtonContainer,
+  ErrorMessage,
+} from "./styles";
 import { Formik } from "formik";
 
 interface props {
   setShowPasswordForm: (active: boolean) => void;
 }
 
+interface FetchData {
+  email: string;
+  password: string;
+}
+
 export const LoginForm: React.FC<props> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [csrfToken, setCsrfToken] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const dispatch = useDispatch();
+
+  const fetchUser = (data: FetchData) => {
+    fetch("/user/login/", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      }),
+    }).then(
+      (res) => {
+        if (res.status === 401) {
+          setErrorMessage("Not matching credentials");
+        } else if (res.status !== 200) {
+          setErrorMessage("Something went wrong");
+        }
+        res.json().then(
+          (data) => {
+            if (data.user) {
+              dispatch(addUser({ user_id: data.user }));
+            }
+          },
+          (e) => console.log(e)
+        );
+      },
+      (e) => console.log(e)
+    );
+  };
 
   useEffect(() => {
     fetch("/user/auth/", {
       headers: {
         accepts: "application/json",
       },
-    }).then((res) => {
-      const cookie = Cookies.get("csrftoken");
-      if (cookie) {
-        setCsrfToken(cookie);
-      }
-    });
+    })
+      .then((res) => {
+        const cookie = Cookies.get("csrftoken");
+        if (cookie) {
+          setCsrfToken(cookie);
+        }
+      })
+      .catch((e) => setErrorMessage(e));
   }, []);
 
   return (
@@ -38,28 +83,13 @@ export const LoginForm: React.FC<props> = (props) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          fetch("/user/login/", {
-            method: "POST",
-            headers: {
-              "X-CSRFToken": csrfToken,
-            },
-            body: JSON.stringify({
-              email: data.email,
-              password: data.password,
-            }),
-          }).then((res) => {
-            res.json().then((data) => {
-              if (data.user) {
-                dispatch(addUser({ user_id: data.user }));
-              }
-            });
-          });
+          fetchUser(data);
           setSubmitting(false);
           resetForm();
         }}
       >
         {({ values, isSubmitting, handleSubmit, handleChange, handleBlur }) => (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} data-testid="loginForm">
             <Field
               placeholder="Email"
               name="email"
@@ -99,6 +129,11 @@ export const LoginForm: React.FC<props> = (props) => {
           </Form>
         )}
       </Formik>
+      {errorMessage && (
+        <ErrorMessage data-testid="errorMessageLogin">
+          {errorMessage}
+        </ErrorMessage>
+      )}
     </Container>
   );
 };

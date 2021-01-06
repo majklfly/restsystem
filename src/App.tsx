@@ -12,8 +12,6 @@ import HomepageScreen from "./screens/HomepageScreen";
 function App() {
   const { user_id } = useSelector((state: RootState) => state.globalReducer);
 
-  console.log("userId", user_id);
-
   useEffect(() => {
     document.title = "RestSystem";
   }, []);

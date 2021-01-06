@@ -1,22 +1,24 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import App from "./App";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
+
+import { addUser } from "./redux/slices/globalSlice";
 
 import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
+import { store } from "./redux/store";
 
-test("renders learn react link", () => {
-  const initialState = {
-    globalReducer: {
-      user_id: "test@mail.com",
-    },
-  };
-  const mockStore = configureStore();
-  const store = mockStore(initialState);
-
+test("tests that screen changes after redux state update", () => {
+  const history = createMemoryHistory();
   render(
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Router history={history}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   );
+  expect(screen.getByTestId("loginContainer")).toBeInTheDocument();
+  store.dispatch(addUser({ user_id: "test@example.com" }));
+  expect(screen.getByTestId("mainContentContainer")).toBeInTheDocument();
 });

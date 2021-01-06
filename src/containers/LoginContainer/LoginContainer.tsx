@@ -54,7 +54,7 @@ export const LoginContainer: React.FC<props> = () => {
   };
 
   return (
-    <Container>
+    <Container data-testid="loginContainer">
       <Box>
         <LeftSide>
           <Lottie animationData={loadingAnimation} loop={false} />

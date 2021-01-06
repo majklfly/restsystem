@@ -1,49 +1,50 @@
 import React from "react";
-import { mount } from "enzyme";
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 
 import { LoginForm } from "./LoginForm";
 
 import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
-import { act } from "react-dom/test-utils";
-
-import _fetchMock from "isomorphic-fetch";
-const fetchMock = _fetchMock;
+import { store } from "../../redux/store";
 
 describe("LoginForm Testing Suit", () => {
-  const initialState = {
-    globalReducer: {
-      user_id: "",
-    },
-  };
-  const mockStore = configureStore();
-  const store = mockStore(initialState);
-
-  it("tests the login of the form", async () => {
-    const wrapper = mount(
+  it("checking submitting with values", async () => {
+    const { getByTestId, getByText } = render(
       <Provider store={store}>
         <LoginForm setShowPasswordForm={jest.fn} />
       </Provider>
     );
-    const emailField = wrapper.find('input[name="email"]');
-    const passwordField = wrapper.find('input[name="password"]');
-    const loginButton = wrapper.find('button[type="submit"]');
-    await act(async () => {
-      emailField.simulate("change", {
-        target: { value: "test@example.com", name: "email" },
+    const emailField = await screen.findByPlaceholderText("Email");
+    const passwordField = await screen.findByPlaceholderText("Password");
+    const loginButton = getByText("Log In");
+    const form = getByTestId("loginForm");
+
+    // adding function to the form
+    const fetchUser = jest.fn();
+    form.onsubmit = fetchUser;
+
+    // filling up the form
+    await waitFor(() => {
+      fireEvent.change(emailField, {
+        target: {
+          value: "test@example.com",
+        },
       });
-      passwordField.simulate("change", {
-        target: { value: "password1", name: "password" },
+    });
+
+    await waitFor(() => {
+      fireEvent.change(passwordField, {
+        target: {
+          value: "password1",
+        },
       });
-      loginButton.simulate("click");
     });
-    fetchMock.mock("/user/login/", {
-      status: 200,
-      body: {
-        status: "logged",
-        user: "test@example.com",
-      },
+
+    // pressing login
+    await waitFor(() => {
+      fireEvent.click(loginButton);
     });
-    expect(loginButton.getDOMNode()).toBeVisible();
+
+    // assertation
+    expect(fetchUser).toHaveBeenCalled();
   });
 });

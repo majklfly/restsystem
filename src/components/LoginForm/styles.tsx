@@ -12,6 +12,7 @@ export const Container = styled.article`
   border-radius: 10px;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   padding: 10%;
 `;
@@ -42,4 +43,10 @@ export const ButtonContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+`;
+
+export const ErrorMessage = styled.h4`
+  color: red;
+  font-family: ${palette.font_primary};
+  text-align: center;
 `;
