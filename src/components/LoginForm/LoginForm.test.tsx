@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "../../redux/store";
 
 describe("LoginForm Testing Suit", () => {
-  it("checking submitting with values", async () => {
+  it("checks submitting with values", async () => {
     const { getByTestId, getByText } = render(
       <Provider store={store}>
         <LoginForm setShowPasswordForm={jest.fn} />

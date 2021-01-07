@@ -6,11 +6,11 @@ import json
 from django.urls import reverse
 from django.core.mail import send_mail
 from rest_framework.response import Response
-from django.utils.encoding import force_bytes
+from django.utils.encoding import smart_str, force_str, force_bytes, DjangoUnicodeDecodeError
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .serializers import ResetPasswordEmailRequestSerializer
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from rest_framework import generics, status
 from .models import CustomUser
@@ -52,8 +52,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
                 'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
             absurl = 'https://r-restsystem.herokuapp.com/' + relativeLink
             email_body = "Hello there, \n You have requested a recovery email. If you don't recognize this email, please contact administrator on majklfly@gmail.com. \nPlease use link below to reset your password \n" + absurl
-            send_mail('Subject here', email_body, 'admin@r-restSystem.com',
-                      [email], fail_silently=False)
+            send_mail('Subject here', "body", 'majklfly2@seznam.cz',
+                      ['majklfly@gmail.com'], fail_silently=False)
         return Response({'A recovery link has been sent to the provided email.'}, status=status.HTTP_200_OK)
 
 
