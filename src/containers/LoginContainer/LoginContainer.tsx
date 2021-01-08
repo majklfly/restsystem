@@ -46,8 +46,18 @@ export const LoginContainer: React.FC<props> = () => {
       }),
     }).then((res) => {
       res.json().then((data) => {
-        if (data.user) {
-          dispatch(addUser({ user_id: data.user }));
+        if (data) {
+          dispatch(
+            addUser({
+              user_id: data.user,
+              company: data.company,
+              access_employees: data.access_employees,
+              access_stock: data.access_stock,
+              access_training: data.access_training,
+              access_orders: data.access_orders,
+              access_rota: data.access_rota,
+            })
+          );
         }
       });
     });

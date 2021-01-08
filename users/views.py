@@ -30,10 +30,12 @@ def login_user(request):
     password = json.loads(request.body)['password']
     user = authenticate(email=email, password=password)
     if user is not None:
-        # the password verified for the user
         if user.is_active:
             login(request, user)
-            return JsonResponse({'status': 'logged', 'user': email}, status=200)
+            user_data = CustomUser.objects.get(
+                email=email)
+            print(user_data.company)
+            return JsonResponse({'status': 'logged', 'user': email, 'company': user.company.name, 'access_employees': user.access_employees, 'access_stock': user.access_stock, 'access_training': user.access_training, 'access_orders': user.access_orders, 'access_rota': user.access_rota}, status=200)
     return JsonResponse({"message": "incorrect credentials"}, status=401)
 
 

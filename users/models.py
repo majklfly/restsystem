@@ -10,6 +10,11 @@ from .managers import CustomUserManager
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     is_staff = models.BooleanField(default=False)
+    access_employees = models.BooleanField(default=False)
+    access_stock = models.BooleanField(default=False)
+    access_training = models.BooleanField(default=False)
+    access_orders = models.BooleanField(default=False)
+    access_rota = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     department = models.ForeignKey(
