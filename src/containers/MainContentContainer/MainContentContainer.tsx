@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, List } from "./styles";
 
 import { Paper, Tab } from "@material-ui/core";
@@ -17,9 +17,12 @@ export const MainContentContainer: React.FC<props> = () => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    console.log(newValue);
     setValue(newValue);
   };
+
+  useEffect(() => {
+    console.log("triggered");
+  }, []);
 
   return (
     <>

@@ -51,7 +51,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             relativeLink = reverse(
                 'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
             absurl = 'https://r-restsystem.herokuapp.com/' + relativeLink
-            email_body = "Hello there, \n You have requested a recovery email. If you don't recognize this email, please contact administrator on majklfly@gmail.com. \nPlease use link below to reset your password \n" + absurl
+            # email_body = "Hello there, \n You have requested a recovery email. If you don't recognize this email, please contact administrator on majklfly@gmail.com. \nPlease use link below to reset your password \n" + absurl
             send_mail('Subject here', "body", 'majklfly2@seznam.cz',
                       ['majklfly@gmail.com'], fail_silently=False)
         return Response({'A recovery link has been sent to the provided email.'}, status=status.HTTP_200_OK)

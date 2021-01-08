@@ -14,6 +14,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     department = models.ForeignKey(
         "departments.Department", on_delete=models.CASCADE, null=True, blank=True)
+    company = models.ForeignKey(
+        "company.company", on_delete=models.CASCADE, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
