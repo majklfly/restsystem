@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 
 import { RootState } from "./redux/reducers/rootReducer";
-
 import { useSelector } from "react-redux";
 
 import LoginScreen from "./screens/LoginScreen";

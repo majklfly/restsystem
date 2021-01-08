@@ -56,6 +56,9 @@ export const LoginContainer: React.FC<props> = () => {
               access_training: data.access_training,
               access_orders: data.access_orders,
               access_rota: data.access_rota,
+              is_active: data.is_active,
+              firstName: data.firstName,
+              lastName: data.lastName,
             })
           );
         }

@@ -9,6 +9,8 @@ from .managers import CustomUserManager
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
+    firstName = models.CharField(max_length=200, null=True, blank=True)
+    lastName = models.CharField(max_length=200, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     access_employees = models.BooleanField(default=False)
     access_stock = models.BooleanField(default=False)

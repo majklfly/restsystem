@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Container, List } from "./styles";
+import { Container, List, Button, NavList } from "./styles";
 
-import { Paper, Tab } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import Schedule from "@material-ui/icons/Schedule";
 import LocalShipping from "@material-ui/icons/LocalShipping";
 import School from "@material-ui/icons/School";
@@ -35,22 +35,24 @@ export const MainContentContainer: React.FC<props> = () => {
     <>
       <UserPanel />
       <Container data-testid="mainContentContainer">
-        <Paper square elevation={3}>
+        <NavList square elevation={3}>
           <List
             value={value}
             onChange={handleChange}
-            variant="fullWidth"
+            variant="scrollable"
             indicatorColor="primary"
             textColor="primary"
             aria-label="icon label tabs example"
           >
-            {access_rota && <Tab icon={<Schedule />} label="Rota" />}
-            {access_orders && <Tab icon={<LocalShipping />} label="Orders" />}
-            {access_training && <Tab icon={<School />} label="Training" />}
-            {access_stock && <Tab icon={<ViewAgenda />} label="Stock" />}
-            {access_employees && <Tab icon={<People />} label="Employees" />}
+            {access_rota && <Button icon={<Schedule />} label="Rota" />}
+            {access_orders && (
+              <Button icon={<LocalShipping />} label="Orders" />
+            )}
+            {access_training && <Button icon={<School />} label="Training" />}
+            {access_stock && <Button icon={<ViewAgenda />} label="Stock" />}
+            {access_employees && <Button icon={<People />} label="Employees" />}
           </List>
-        </Paper>
+        </NavList>
         {value === 4 && <EmployeesContainer />}
       </Container>
     </>

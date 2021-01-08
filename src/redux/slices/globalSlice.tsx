@@ -8,6 +8,9 @@ interface user {
   access_training: boolean;
   access_orders: boolean;
   access_rota: boolean;
+  is_active: boolean;
+  firstName: string;
+  lastName: string;
 }
 
 interface CurrentState {
@@ -18,6 +21,9 @@ interface CurrentState {
   access_training: boolean;
   access_orders: boolean;
   access_rota: boolean;
+  is_active: boolean;
+  firstName: string;
+  lastName: string;
 }
 
 let initialState: CurrentState = {
@@ -28,6 +34,9 @@ let initialState: CurrentState = {
   access_training: false,
   access_orders: false,
   access_rota: false,
+  is_active: false,
+  firstName: "",
+  lastName: "",
 };
 
 const globalSlice = createSlice({
@@ -43,6 +52,9 @@ const globalSlice = createSlice({
         access_training,
         access_orders,
         access_rota,
+        is_active,
+        firstName,
+        lastName,
       } = action.payload;
       state.user_id = user_id;
       state.company = company;
@@ -51,6 +63,9 @@ const globalSlice = createSlice({
       state.access_training = access_training;
       state.access_orders = access_orders;
       state.access_rota = access_rota;
+      state.is_active = is_active;
+      state.firstName = firstName;
+      state.lastName = lastName;
     },
   },
 });
