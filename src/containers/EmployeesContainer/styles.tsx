@@ -9,7 +9,7 @@ export const Container = styled.section`
   justify-content: flex-end;
   align-items: flex-end;
   flex-direction: column;
-  width: 90vw;
+  width: 100%;
   height: 70vh;
   max-width: 1500px;
   flex-wrap: wrap;

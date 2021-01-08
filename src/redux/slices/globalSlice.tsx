@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface user {
   user_id: string;
   company: string;
+  company_id: number;
   access_employees: boolean;
   access_stock: boolean;
   access_training: boolean;
@@ -16,6 +17,7 @@ interface user {
 interface CurrentState {
   user_id: string;
   company: string;
+  company_id: number;
   access_employees: boolean;
   access_stock: boolean;
   access_training: boolean;
@@ -29,6 +31,7 @@ interface CurrentState {
 let initialState: CurrentState = {
   user_id: "",
   company: "",
+  company_id: 0,
   access_employees: false,
   access_stock: false,
   access_training: false,
@@ -47,6 +50,7 @@ const globalSlice = createSlice({
       const {
         user_id,
         company,
+        company_id,
         access_employees,
         access_stock,
         access_training,
@@ -58,6 +62,7 @@ const globalSlice = createSlice({
       } = action.payload;
       state.user_id = user_id;
       state.company = company;
+      state.company_id = company_id;
       state.access_employees = access_employees;
       state.access_stock = access_stock;
       state.access_training = access_training;

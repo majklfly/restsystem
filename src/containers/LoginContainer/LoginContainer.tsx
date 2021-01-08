@@ -51,6 +51,7 @@ export const LoginContainer: React.FC<props> = () => {
             addUser({
               user_id: data.user,
               company: data.company,
+              company_id: data.company_id,
               access_employees: data.access_employees,
               access_stock: data.access_stock,
               access_training: data.access_training,

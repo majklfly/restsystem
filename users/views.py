@@ -34,7 +34,7 @@ def login_user(request):
             login(request, user)
             user_data = CustomUser.objects.get(
                 email=email)
-            return JsonResponse({'status': 'logged', 'user': email, 'company': user.company.name, 'access_employees': user.access_employees, 'access_stock': user.access_stock, 'access_training': user.access_training, 'access_orders': user.access_orders, 'access_rota': user.access_rota, 'is_active': user.is_active, 'firstName': user.firstName, 'lastName': user.lastName}, status=200)
+            return JsonResponse({'status': 'logged', 'user': email, 'company': user.company.name, 'company_id': user.company.id, 'access_employees': user.access_employees, 'access_stock': user.access_stock, 'access_training': user.access_training, 'access_orders': user.access_orders, 'access_rota': user.access_rota, 'is_active': user.is_active, 'firstName': user.firstName, 'lastName': user.lastName}, status=200)
     return JsonResponse({"message": "incorrect credentials"}, status=401)
 
 
