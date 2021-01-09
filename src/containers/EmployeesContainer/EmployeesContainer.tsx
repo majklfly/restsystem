@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Container } from "./styles";
 import Cookies from "js-cookie";
 
@@ -7,15 +7,36 @@ import { useSelector } from "react-redux";
 
 import { EmployeesList } from "../../components/EmployeesList/EmployeesList";
 
+import { useDispatch } from "react-redux";
+import { addEmployes, addDepartments } from "../../redux/slices/employeesSlice";
+
+interface user {
+  firstName: string;
+  lastName: string;
+  email: string;
+  date_joined: string;
+  company: string;
+  department: string;
+}
+interface department {
+  name: string;
+  users: user[];
+  id: number;
+}
+
 interface props {}
 
 export const EmployeesContainer: React.FC<props> = (props) => {
   const { company_id } = useSelector((state: RootState) => state.globalReducer);
-  const [data, setData] = useState();
+  const { employees } = useSelector(
+    (state: RootState) => state.employeeReducer
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const token = Cookies.get("csrftoken");
-    if (token) {
+    if (token && employees.length === 0) {
       fetch(`/company/${company_id}`, {
         method: "GET",
         headers: {
@@ -23,11 +44,25 @@ export const EmployeesContainer: React.FC<props> = (props) => {
         },
       }).then((res) => {
         res.json().then((data) => {
-          setData(data);
+          const employees: user[] = [];
+          const departments: (string | number)[][] = [];
+          data.departments.forEach((department: department) => {
+            departments.push([department.id, department.name]);
+            console.log(department);
+            department.users.forEach((employee: user) => {
+              employees.push(employee);
+            });
+          });
+          dispatch(addDepartments({ departments }));
+          dispatch(addEmployes({ employees }));
         });
       });
     }
   }, [company_id]);
 
-  return <Container>{data && <EmployeesList data={data} />}</Container>;
+  return (
+    <Container>
+      <EmployeesList />
+    </Container>
+  );
 };

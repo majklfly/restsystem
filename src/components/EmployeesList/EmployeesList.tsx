@@ -1,4 +1,4 @@
-import React, { ReactText, useEffect, useState } from "react";
+import React from "react";
 import {
   ListItem,
   ListItemAvatar,
@@ -8,9 +8,13 @@ import {
   IconButton,
 } from "@material-ui/core";
 
-import FolderIcon from "@material-ui/icons/Folder";
+import AccountBox from "@material-ui/icons/AccountBox";
+import Edit from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { MainList } from "./styles";
+
+import { RootState } from "../../redux/reducers/rootReducer";
+import { useSelector } from "react-redux";
 
 interface user {
   firstName: string;
@@ -20,48 +24,23 @@ interface user {
   company: string;
   department: string;
 }
-interface department {
-  name: string;
-  users: user[];
-  id: number;
-}
 
-interface props {
-  data:
-    | {
-        id: number;
-        departments: department[];
-        created: string;
-        name: string;
-      }
-    | undefined;
-}
+interface props {}
 
 export const EmployeesList: React.FC<props> = (props) => {
-  const [employees, setEmployees] = useState<user[]>([]);
-  const [departments, setDepartments] = useState<ReactText[][]>([]);
+  const { employees, departments } = useSelector(
+    (state: RootState) => state.employeeReducer
+  );
 
-  useEffect(() => {
-    if (props.data) {
-      const employees: user[] = [];
-      props.data.departments.forEach((department) => {
-        setDepartments((prev) => [...prev, [department.id, department.name]]);
-        console.log(department);
-        department.users.forEach((employee) => {
-          employees.push(employee);
-        });
-      });
-      setEmployees(employees);
-    }
-  }, []);
-
-  const recognizeDepartment = (departmentId: number) => {
+  const nameDepartment = (department: number) => {
     let string;
-    departments.forEach((item) => {
-      if (item[0] === departmentId) {
-        string = item[1];
-      }
-    });
+    if (departments) {
+      departments.forEach((item) => {
+        if (item[0] === department) {
+          string = item[1];
+        }
+      });
+    }
     return string;
   };
 
@@ -72,17 +51,19 @@ export const EmployeesList: React.FC<props> = (props) => {
           <ListItem>
             <ListItemAvatar>
               <Avatar>
-                <FolderIcon />
+                <AccountBox />
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               primary={employee.firstName + " " + employee.lastName}
               secondary={
-                "Department: " +
-                recognizeDepartment(parseInt(employee.department))
+                "Department: " + nameDepartment(parseInt(employee.department))
               }
             />
             <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="edit">
+                <Edit />
+              </IconButton>
               <IconButton edge="end" aria-label="delete">
                 <DeleteIcon />
               </IconButton>
