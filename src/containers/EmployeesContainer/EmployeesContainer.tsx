@@ -11,7 +11,7 @@ interface props {}
 
 export const EmployeesContainer: React.FC<props> = (props) => {
   const { company_id } = useSelector((state: RootState) => state.globalReducer);
-  const [data, setData] = useState({});
+  const [data, setData] = useState();
 
   useEffect(() => {
     const token = Cookies.get("csrftoken");
@@ -29,9 +29,5 @@ export const EmployeesContainer: React.FC<props> = (props) => {
     }
   }, [company_id]);
 
-  return (
-    <Container>
-      <EmployeesList data={data} />
-    </Container>
-  );
+  return <Container>{data && <EmployeesList data={data} />}</Container>;
 };

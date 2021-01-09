@@ -6,11 +6,13 @@ export const Container = styled.section`
   display: flex;
   font-family: ${palette.font_primary};
   background-color: ${palette.background_color};
-  justify-content: flex-end;
-  align-items: flex-end;
   flex-direction: column;
   width: 100%;
   height: 70vh;
   max-width: 1500px;
   flex-wrap: wrap;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;

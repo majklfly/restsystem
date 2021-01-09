@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Container, List, Button, NavList } from "./styles";
 
-import { Paper } from "@material-ui/core";
 import Schedule from "@material-ui/icons/Schedule";
 import LocalShipping from "@material-ui/icons/LocalShipping";
 import School from "@material-ui/icons/School";

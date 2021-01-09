@@ -14,21 +14,7 @@ interface user {
   lastName: string;
 }
 
-interface CurrentState {
-  user_id: string;
-  company: string;
-  company_id: number;
-  access_employees: boolean;
-  access_stock: boolean;
-  access_training: boolean;
-  access_orders: boolean;
-  access_rota: boolean;
-  is_active: boolean;
-  firstName: string;
-  lastName: string;
-}
-
-let initialState: CurrentState = {
+let initialState: user = {
   user_id: "",
   company: "",
   company_id: 0,

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { ReactText, useEffect, useState } from "react";
 import {
-  List,
   ListItem,
   ListItemAvatar,
   Avatar,
@@ -11,41 +10,86 @@ import {
 
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
-
 import { MainList } from "./styles";
 
+interface user {
+  firstName: string;
+  lastName: string;
+  email: string;
+  date_joined: string;
+  company: string;
+  department: string;
+}
+interface department {
+  name: string;
+  users: user[];
+  id: number;
+}
+
 interface props {
-  data: object;
+  data:
+    | {
+        id: number;
+        departments: department[];
+        created: string;
+        name: string;
+      }
+    | undefined;
 }
 
 export const EmployeesList: React.FC<props> = (props) => {
-  console.log(props.data);
+  const [employees, setEmployees] = useState<user[]>([]);
+  const [departments, setDepartments] = useState<ReactText[][]>([]);
 
-  function generate(element: React.ReactElement) {
-    return [0, 1, 2].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      })
-    );
-  }
+  useEffect(() => {
+    if (props.data) {
+      const employees: user[] = [];
+      props.data.departments.forEach((department) => {
+        setDepartments((prev) => [...prev, [department.id, department.name]]);
+        console.log(department);
+        department.users.forEach((employee) => {
+          employees.push(employee);
+        });
+      });
+      setEmployees(employees);
+    }
+  }, []);
+
+  const recognizeDepartment = (departmentId: number) => {
+    let string;
+    departments.forEach((item) => {
+      if (item[0] === departmentId) {
+        string = item[1];
+      }
+    });
+    return string;
+  };
 
   return (
     <MainList>
-      {generate(
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <FolderIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Single-line item" secondary="Secondary text" />
-          <ListItemSecondaryAction>
-            <IconButton edge="end" aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      )}
+      {employees.map((employee: user) => {
+        return (
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <FolderIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={employee.firstName + " " + employee.lastName}
+              secondary={
+                "Department: " +
+                recognizeDepartment(parseInt(employee.department))
+              }
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        );
+      })}
     </MainList>
   );
 };
