@@ -8,7 +8,8 @@ export const Container = styled.section`
   background-color: ${palette.background_color};
   flex-direction: column;
   width: 100%;
-  height: 70vh;
+  min-width: 150px;
+  height: 65vh;
   max-width: 1500px;
   flex-wrap: wrap;
   overflow: scroll;

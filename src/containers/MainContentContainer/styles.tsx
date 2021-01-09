@@ -36,7 +36,9 @@ export const Button = styled(Tab)`
 
 export const NavList = styled(Paper)`
   && {
-    width: auto;
+    width: 90vw;
+    background-color: transparent;
+    box-shadow: none;
     max-width: 1500px;
     display: flex;
     align-items: flex-end;

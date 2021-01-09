@@ -6,6 +6,7 @@ import { RootState } from "../../redux/reducers/rootReducer";
 import { useSelector } from "react-redux";
 
 import { EmployeesList } from "../../components/EmployeesList/EmployeesList";
+import { EmployeesSearchBar } from "../../components/EmployeesSearchBar/EmployeesSearchBar";
 
 import { useDispatch } from "react-redux";
 import { addEmployes, addDepartments } from "../../redux/slices/employeesSlice";
@@ -37,7 +38,7 @@ export const EmployeesContainer: React.FC<props> = (props) => {
   useEffect(() => {
     const token = Cookies.get("csrftoken");
     if (token && employees.length === 0) {
-      fetch(`/company/${company_id}`, {
+      fetch(`/company/${company_id}/`, {
         method: "GET",
         headers: {
           "X-CSRFToken": token,
@@ -58,11 +59,14 @@ export const EmployeesContainer: React.FC<props> = (props) => {
         });
       });
     }
-  }, [company_id]);
+  }, []);
 
   return (
-    <Container>
-      <EmployeesList />
-    </Container>
+    <>
+      <EmployeesSearchBar />
+      <Container>
+        <EmployeesList />
+      </Container>
+    </>
   );
 };
